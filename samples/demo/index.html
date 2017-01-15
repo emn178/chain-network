@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Chain Network</title>
+  <meta name="viewport" content="user-scalable=no, width=device-width">
+  <meta name="apple-mobile-web-app-capable" content="no">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black"><link href='https://fonts.googleapis.com/css?family=Roboto+Slab' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.0/vis.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.0/vis.min.js"></script>
+  <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="../../src/chain-network.js"></script>
+  <script src="app.js"></script>
+  <style type="text/css">
+    #network {
+      height: 600px;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <h1>Chain Network</h1>
+    <a href="https://github.com/emn178/chain-network"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://github-camo.global.ssl.fastly.net/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+  </div>
+  <div id="body">
+    <div id="description">
+      <p>
+        Scroll down to see the effect.
+      </p>
+    </div>
+    <div id="code-block">
+      <h3>Source Code</h3>
+      <pre class="brush: js">
+        $(&#39;#network&#39;).chainNetwork({
+          vis: {
+            groups: {
+              project: {
+                shape: &#39;icon&#39;,
+                icon: {
+                  face: &#39;FontAwesome&#39;,
+                  code: &#39;\uf004&#39;,
+                  size: 30,
+                  color: &#39;red&#39;
+                }
+              },
+              vendor: {
+                shape: &#39;icon&#39;,
+                icon: {
+                  face: &#39;FontAwesome&#39;,
+                  code: &#39;\uf19c&#39;,
+                  size: 30,
+                  color: &#39;#752ab9&#39;
+                }
+              },
+              user: {
+                shape: &#39;icon&#39;,
+                icon: {
+                  face: &#39;FontAwesome&#39;,
+                  code: &#39;\uf007&#39;,
+                  size: 30
+                }
+              }
+            }
+          },
+          project: {
+            id: &#39;project_25&#39;,
+            label: &#39;This Project&#39;,
+            target: 50000,
+            tooltipTemplate: &#39;Target: {target}&lt;br/&gt;Current: {incomingValue}({incomingPercentage}%)&lt;br/&gt;Used: {outgoingValue}({outgoingPercentage}%)&#39;
+          },
+          nodes: [
+            { id: &#39;user_5&#39;, label: &#39;takasaky&#39;, group: &#39;user&#39; },
+            { id: &#39;user_6&#39;, label: &#39;tester&#39;, group: &#39;user&#39; },
+            { id: &#39;user_4&#39;, label: &#39;will&#39;, group: &#39;user&#39; },
+            { id: &#39;user_7&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_8&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_9&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_10&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_11&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_12&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_13&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_14&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_15&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_16&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;project_2&#39;, label: &#39;Project 2&#39;, group: &#39;project&#39; },
+            { id: &#39;vendor_1&#39;, label: &#39;Vendor 1&#39;, group: &#39;vendor&#39; }
+          ],
+          transcations: [
+            { id: &#39;TID01&#39;, from: &#39;user_5&#39;, to: &#39;project_25&#39;, value: 3456 },
+            { id: &#39;TID02&#39;, from: &#39;user_6&#39;, to: &#39;project_25&#39;, value: 123 },
+            { id: &#39;TID03&#39;, from: &#39;project_25&#39;, to: &#39;user_4&#39;, value: 456 },
+            { id: &#39;TID04&#39;, from: &#39;project_25&#39;, to: &#39;user_6&#39;, value: 123 },
+            { id: &#39;TID05&#39;, from: &#39;user_7&#39;, to: &#39;project_25&#39;, value: 800 },
+            { id: &#39;TID06&#39;, from: &#39;user_8&#39;, to: &#39;project_25&#39;, value: 500 },
+            { id: &#39;TID07&#39;, from: &#39;user_9&#39;, to: &#39;project_25&#39;, value: 1000 },
+            { id: &#39;TID08&#39;, from: &#39;user_10&#39;, to: &#39;project_25&#39;, value: 1200 },
+            { id: &#39;TID09&#39;, from: &#39;user_11&#39;, to: &#39;project_25&#39;, value: 300 },
+            { id: &#39;TID10&#39;, from: &#39;user_12&#39;, to: &#39;project_25&#39;, value: 600 },
+            { id: &#39;TID11&#39;, from: &#39;project_25&#39;, to: &#39;user_13&#39;, value: 1000 },
+            { id: &#39;TID12&#39;, from: &#39;project_25&#39;, to: &#39;user_14&#39;, value: 1000 },
+            { id: &#39;TID13&#39;, from: &#39;project_25&#39;, to: &#39;user_15&#39;, value: 1000 },
+            { id: &#39;TID14&#39;, from: &#39;project_25&#39;, to: &#39;user_16&#39;, value: 1000 },
+            { id: &#39;TID15&#39;, from: &#39;project_25&#39;, to: &#39;project_2&#39;, value: 100 },
+            { id: &#39;TID16&#39;, from: &#39;project_25&#39;, to: &#39;vendor_1&#39;, value: 500 }
+          ]
+        });
+      </pre>
+    </div>
+    <div id="network"></div>
+  </div>
+  <div id="footer">
+    © 2014-2016 jQuery-stickit Demo and content from Wikipedia
+  </div>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shCore.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/styles/shThemeDefault.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shCore.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/SyntaxHighlighter/3.0.83/scripts/shBrushJScript.js"></script>
+  <script>
+    SyntaxHighlighter.all();
+  </script>
+</body>
+</html>
