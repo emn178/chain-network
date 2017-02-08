@@ -22,7 +22,7 @@
   function ChainNetwork(element, options) {
     var self = this;
     this.element = element;
-    this.pageSize = options.pageSize || 10;
+    this.pageSize = options.pageSize || 5;
     this.projectColor = options.projectColor || '#f0ad4e';
     this.projectTooltipTemplate = options.project.tooltipTemplate || 'Target: {target}<br/>Current: {incomingValue}({incomingPercentage}%)<br/>Used: {outgoingValue}({outgoingPercentage}%)';
     this.incomingEdgeColor = options.incomingEdgeColor || '#02c66c';
@@ -37,7 +37,7 @@
     this.networkEdges = [];
 
     this.incomingNodeIds = {};
-    this.transcationsMap = {}
+    this.transcationsMap = {};
     this.transcations = options.transcations || [];
     var incomingValue = 0, outgoingValue = 0;
     this.transcations.forEach(function (transcation) {
@@ -63,29 +63,14 @@
       self.networkEdges.push(edge);
     });
 
-    var levelSize = Math.ceil(this.pageSize / 2);
-    var incomingCount = Object.keys(this.incomingNodeIds).length;
-    var outgoingCount = this.nodes.length - incomingCount;
-    var incomingSwitch = incomingCount > levelSize;
-    var outgoingSwitch = outgoingCount > levelSize;
-    var leftIndex = 0, rightIndex = 0, level;
+    this.incomingNodes = [];
+    this.outgoingNodes = [];
     this.nodes.forEach(function (node) {
       if (self.incomingNodeIds[node.id]) {
-        if (incomingSwitch) {
-          level = leftIndex % 2 ? 0 : 1;
-        } else {
-          level = 1;
-        }
-        ++leftIndex;
+        self.incomingNodes.push(node);
       } else {
-        if (outgoingSwitch) {
-          level = rightIndex % 2 ? 4 : 3;
-        } else {
-          level = 3;
-        }
-        ++rightIndex;
+        self.outgoingNodes.push(node);
       }
-      self.addNode(node, level);
     });
 
     var incomingPercentage = incomingValue / options.project.target * 100;
@@ -107,12 +92,12 @@
     var title = interpolate(this.projectTooltipTemplate, { 
       target: options.project.target,
       incomingValue: incomingValue,
-      incomingPercentage: incomingPercentage,
+      incomingPercentage: incomingPercentage.toFixed(2),
       outgoingValue: outgoingValue,
-      outgoingPercentage: outgoingPercentage
+      outgoingPercentage: outgoingPercentage.toFixed(2)
     });
 
-    this.addNode(options.project, 2, {
+    this.rootNode = this.createNode(options.project, 1, {
       image: url,
       shape: 'image',
       color: this.projectColor,
@@ -121,8 +106,8 @@
     });
 
     var data = {
-      nodes: this.networkNodes,
-      edges: this.networkEdges
+      nodes: [],
+      edges: []
     };
 
     this.network = new vis.Network(element[0], data, $.extend({
@@ -143,6 +128,13 @@
         var node = self.nodesMap[obj.nodes[0]];
         if (node) {
           element.trigger('chain:node', node);
+        } else {
+          var parts = obj.nodes[0].split('_');
+          if (parts[0] === 'incoming') {
+            self.setIncomingPage(parseInt(parts[2]));
+          } else {
+            self.setoutgoingPage(parseInt(parts[2]));
+          }
         }
       } else if (obj.edges.length) {
         var transcation = self.transcationsMap[obj.edges[0]];
@@ -151,15 +143,132 @@
         }
       }
     });
+
+    this.incomingPage = this.outgoingPage = 1;
+    this.incomingPages = this.calculatePages(this.incomingNodes.length);
+    this.outgoingPages = this.calculatePages(this.outgoingNodes.length);
+
+    this.render();
+  };
+
+  ChainNetwork.prototype.calculatePages = function (count) {
+    if (count <= this.pageSize) {
+      return 1;
+    } else if (count <= (this.pageSize - 1) * 2) {
+      return 2;
+    }
+    count -= (this.pageSize - 1) * 2;
+    return Math.ceil(count / (this.pageSize - 2)) + 2;
+  };
+
+  ChainNetwork.prototype.setIncomingPage = function (page) {
+    if (this.incomingPage === page) {
+      return;
+    }
+    this.incomingPage = page;
+    this.render();
+  };
+
+  ChainNetwork.prototype.setoutgoingPage = function (page) {
+    if (this.outgoingPage === page) {
+      return;
+    }
+    this.outgoingPage = page;
+    this.render();
+  };
+
+  ChainNetwork.prototype.render = function () {
+    var self = this;
+    this.pageEdges = [];
+    this.prePageEdges = [];
+    this.networkNodes = [this.rootNode];
+
+    this.getNodesByType('incoming').forEach(function (node) {
+      self.addNode(node, 0);
+    });
+
+    this.getNodesByType('outgoing').forEach(function (node) {
+      self.addNode(node, 2);
+    });
+
+    var data = {
+      nodes: this.networkNodes,
+      edges: this.prePageEdges.concat(this.networkEdges.concat(this.pageEdges))
+    };
+
+    this.network.setData(data);
+  };
+
+  ChainNetwork.prototype.getNodesByType = function (type) {
+    var nodes, page, pages;
+    if (type === 'incoming') {
+      nodes = this.incomingNodes;
+      page = this.incomingPage;
+      pages = this.incomingPages;
+    } else {
+      nodes = this.outgoingNodes;
+      page = this.outgoingPage;
+      pages = this.outgoingPages;
+    }
+    var start;
+    if (page === 1) {
+      start = 0;
+      size = this.incomingPages === 1 ? this.pageSize : this.pageSize - 1;
+    } else if (page === pages) {
+      start = this.pageSize - 1 + (this.pageSize - 2) * (page - 2);
+      size = this.pageSize - 1;
+    } else {
+      start = this.pageSize - 1 + (this.pageSize - 2) * (page - 2);
+      size = this.pageSize - 2;
+    }
+    end = start + size;
+    nodes = nodes.slice(start, end);
+    if (page !== 1) {
+      nodes.unshift(this.createPageNode(type, page - 1, this.prePageEdges, 'Previous Group'));
+    }
+    if (page !== pages) {
+      nodes.push(this.createPageNode(type, page + 1, this.pageEdges, 'Next Group'));
+    }
+    return nodes;
+  };
+
+  ChainNetwork.prototype.createPageNode = function (type, page, edges, label) {
+    var from, to, color, pageId = type + '_PAGE_' + page;
+    if (type === 'incoming') {
+      from = pageId;
+      to = this.project.id;
+      color = this.incomingEdgeColor;
+    } else {
+      from = this.project.id;
+      to = pageId;
+      color = this.outgoingEdgeColor;
+    }
+
+    edges.push({ 
+      id: type + '_PAGE_EDGE_' + page,
+      arrows: 'to',
+      from: from,
+      to: to,
+      color: color
+    });
+
+    return {
+      id: pageId,
+      label: label,
+      group: 'page'
+    };
   };
 
   ChainNetwork.prototype.addNode = function (node, level, extra) {
-    node = $.extend({
+    this.networkNodes.push(this.createNode(node, level, extra));
+  };
+
+  ChainNetwork.prototype.createNode = function (node, level, extra) {
+    return $.extend({
       level: level,
       physics: false
     }, extra, node);
-    this.networkNodes.push(node);
-  }
+  };
 
   var init = false;
   $.fn.chainNetwork = function (options) {
