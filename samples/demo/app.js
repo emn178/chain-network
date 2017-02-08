@@ -34,7 +34,8 @@
             icon: {
               face: 'FontAwesome',
               code: '\uf0c0',
-              size: 30
+              size: 30,
+              color: '#fd6705'
             }
           }
         }
