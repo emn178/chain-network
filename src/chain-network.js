@@ -7,6 +7,8 @@
  */
 (function () {
   var KEY = 'chain-network';
+  var EDGE_LEVEL = 20;
+  var MAX_EDGE_WIDTH = 5;
 
   function interpolate(str, vars) {
     var args = arguments.length > 2 || typeof vars != 'object' ? arguments : vars;
@@ -43,17 +45,19 @@
     var incomingValue = 0, outgoingValue = 0;
     this.transcations.forEach(function (transcation) {
       self.transcationsMap[transcation.id] = transcation;
-      var color, dashes = false;
+      var color, dashes = false, incoming;
       if (transcation.to === self.project.id) {
         self.incomingNodeIds[transcation.from] = true;
         color = self.incomingEdgeColor;
         incomingValue += transcation.value;
+        incoming = true;
       } else {
         color = self.outgoingEdgeColor;
         if (self.incomingNodeIds[transcation.to]) {
           dashes = true;
         }
         outgoingValue += transcation.value;
+        incoming = false;
       }
       var edgeId = transcation.from + '_' + transcation.to;
       if (!self.aggEdgesMap[edgeId]) {
@@ -65,15 +69,32 @@
           smooth: dashes ? { type: 'continuous' } : false
         }, transcation);
         edge.id = edgeId;
+        delete edge.value;
         self.networkEdges.push(edge);
-        self.aggEdgesMap[edgeId] = { id: edgeId, transcations: [], edge: edge };
+        self.aggEdgesMap[edgeId] = { 
+          id: edgeId, 
+          transcations: [], 
+          edge: edge,
+          incoming: incoming
+        };
       }
       var aggEdge = self.aggEdgesMap[edgeId];
       aggEdge.transcations.push(transcation);
-      aggEdge.edge.value = aggEdge.transcations.reduce(function (pre, current) {
+      aggEdge.value = aggEdge.transcations.reduce(function (pre, current) {
         return pre + current.value;
       }, 0);
     });
+
+    Object.keys(this.aggEdgesMap).forEach(function (key) {
+      var aggEdge = self.aggEdgesMap[key];
+      var total = aggEdge.incoming ? incomingValue : outgoingValue;
+      aggEdge.edge.width = aggEdge.value / total * EDGE_LEVEL;
+      if (aggEdge.edge.width > MAX_EDGE_WIDTH) {
+        aggEdge.edge.width = MAX_EDGE_WIDTH;
+      } else {
+        aggEdge.edge.width = Math.max(aggEdge.edge.width, 1);
+      }
+    })
 
     this.incomingNodes = [];
     this.outgoingNodes = [];
