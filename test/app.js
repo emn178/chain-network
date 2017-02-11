@@ -79,12 +79,34 @@
         { id: 'TID13', from: 'project_25', to: 'user_15', value: 1000 },
         { id: 'TID14', from: 'project_25', to: 'user_16', value: 1000 },
         { id: 'TID15', from: 'project_25', to: 'project_2', value: 100 },
-        { id: 'TID16', from: 'project_25', to: 'vendor_1', value: 500 }
+        { id: 'TID16', from: 'project_25', to: 'vendor_1', value: 500 },
+        { id: 'TID17', from: 'user_7', to: 'project_25', value: 200 }
       ]
-    }).on('chain:transcation', function (e, transcation) {
-      console.log(transcation);
-    }).on('chain:node', function (e, node) {
-      console.log(node);
+    }).on('chain:transcation', function (e, pointer, transcations) {
+      var html = '';
+      transcations.forEach(function (transcation) {
+        html += '<p>' + transcation.id + ': $' + transcation.value + '</p>';
+      });
+      var position = $('#network').position();
+      $('#popup').html(html).css({
+        left: position.left + pointer.DOM.x + 'px',
+        top: position.top + pointer.DOM.y + 'px'
+      }).fadeIn();
+      lock = true;
+      setTimeout(function() {
+        lock = false;
+      });
+      console.log(pointer, transcations);
+    }).on('chain:node', function (e, pointer, node) {
+      console.log(pointer, node);
+    });
+
+    var lock = false;
+    $('#popup').clickout(function (e) {
+      if (lock) {
+        return;
+      }
+      $('#popup').fadeOut();
     });
   });
 })(jQuery);

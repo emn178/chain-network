@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.18.0/vis.min.js"></script>
   <script src="https://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <script src="https://rawgit.com/emn178/jquery-clickout/master/build/jquery.clickout.min.js"></script>
   <script src="../../src/chain-network.js"></script>
   <script src="app.js"></script>
   <style type="text/css">
@@ -83,16 +84,16 @@
             { id: &#39;user_5&#39;, label: &#39;takasaky&#39;, group: &#39;user&#39; },
             { id: &#39;user_6&#39;, label: &#39;tester&#39;, group: &#39;user&#39; },
             { id: &#39;user_4&#39;, label: &#39;will&#39;, group: &#39;user&#39; },
-            { id: &#39;user_7&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
-            { id: &#39;user_8&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
-            { id: &#39;user_9&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
-            { id: &#39;user_10&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
-            { id: &#39;user_11&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
-            { id: &#39;user_12&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
-            { id: &#39;user_13&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
-            { id: &#39;user_14&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
-            { id: &#39;user_15&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
-            { id: &#39;user_16&#39;, label: &#39;user&#39;, group: &#39;user&#39; },
+            { id: &#39;user_7&#39;, label: &#39;user7&#39;, group: &#39;user&#39; },
+            { id: &#39;user_8&#39;, label: &#39;user8&#39;, group: &#39;user&#39; },
+            { id: &#39;user_9&#39;, label: &#39;user9&#39;, group: &#39;user&#39; },
+            { id: &#39;user_10&#39;, label: &#39;user10&#39;, group: &#39;user&#39; },
+            { id: &#39;user_11&#39;, label: &#39;user11&#39;, group: &#39;user&#39; },
+            { id: &#39;user_12&#39;, label: &#39;user12&#39;, group: &#39;user&#39; },
+            { id: &#39;user_13&#39;, label: &#39;user13&#39;, group: &#39;user&#39; },
+            { id: &#39;user_14&#39;, label: &#39;user14&#39;, group: &#39;user&#39; },
+            { id: &#39;user_15&#39;, label: &#39;user15&#39;, group: &#39;user&#39; },
+            { id: &#39;user_16&#39;, label: &#39;user16&#39;, group: &#39;user&#39; },
             { id: &#39;project_2&#39;, label: &#39;Project 2&#39;, group: &#39;project&#39; },
             { id: &#39;vendor_1&#39;, label: &#39;Vendor 1&#39;, group: &#39;vendor&#39; }
           ],
@@ -112,12 +113,14 @@
             { id: &#39;TID13&#39;, from: &#39;project_25&#39;, to: &#39;user_15&#39;, value: 1000 },
             { id: &#39;TID14&#39;, from: &#39;project_25&#39;, to: &#39;user_16&#39;, value: 1000 },
             { id: &#39;TID15&#39;, from: &#39;project_25&#39;, to: &#39;project_2&#39;, value: 100 },
-            { id: &#39;TID16&#39;, from: &#39;project_25&#39;, to: &#39;vendor_1&#39;, value: 500 }
+            { id: &#39;TID16&#39;, from: &#39;project_25&#39;, to: &#39;vendor_1&#39;, value: 500 },
+            { id: &#39;TID17&#39;, from: &#39;user_7&#39;, to: &#39;project_25&#39;, value: 200 }
           ]
         });
       </pre>
     </div>
     <div id="network"></div>
+    <div id="popup"></div>
   </div>
   <div id="footer">
     © 2014-2016 jQuery-stickit Demo and content from Wikipedia

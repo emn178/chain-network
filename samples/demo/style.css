@@ -41,3 +41,12 @@ body, html, h1, h2 {
 #code-block h3 {
   text-align: center;
 }
+
+#popup {
+  position: absolute;
+  background-color: rgba(0,0,0,0.8);
+  padding: 0 20px;
+  border-radius: 10px;
+  color: white;
+  display: none;
+}

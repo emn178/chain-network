@@ -38,6 +38,7 @@
 
     this.incomingNodeIds = {};
     this.transcationsMap = {};
+    this.aggEdgesMap = {};
     this.transcations = options.transcations || [];
     var incomingValue = 0, outgoingValue = 0;
     this.transcations.forEach(function (transcation) {
@@ -54,13 +55,22 @@
         }
         outgoingValue += transcation.value;
       }
-      var edge = $.extend({
-        arrows: 'to',
-        color: color,
-        dashes: dashes,
-        label: transcation.value
-      }, transcation);
-      self.networkEdges.push(edge);
+      var edgeId = transcation.from + '_' + transcation.to;
+      if (!self.aggEdgesMap[edgeId]) {
+        var edge = $.extend({
+          arrows: 'to',
+          color: color,
+          dashes: dashes
+        }, transcation);
+        edge.id = edgeId;
+        self.networkEdges.push(edge);
+        self.aggEdgesMap[edgeId] = { id: edgeId, transcations: [], edge: edge };
+      }
+      var aggEdge = self.aggEdgesMap[edgeId];
+      aggEdge.transcations.push(transcation);
+      aggEdge.edge.label = aggEdge.edge.value = aggEdge.transcations.reduce(function (pre, current) {
+        return pre + current.value;
+      }, 0);
     });
 
     this.incomingNodes = [];
@@ -127,7 +137,7 @@
       if (obj.nodes.length) {
         var node = self.nodesMap[obj.nodes[0]];
         if (node) {
-          element.trigger('chain:node', node);
+          element.trigger('chain:node', [obj.pointer, node]);
         } else {
           var parts = obj.nodes[0].split('_');
           if (parts[0] === 'incoming') {
@@ -137,9 +147,9 @@
           }
         }
       } else if (obj.edges.length) {
-        var transcation = self.transcationsMap[obj.edges[0]];
-        if (transcation) {
-          element.trigger('chain:transcation', transcation);
+        var aggEdge = self.aggEdgesMap[obj.edges[0]];
+        if (aggEdge) {
+          element.trigger('chain:transcation', [obj.pointer, aggEdge.transcations]);
         }
       }
     });

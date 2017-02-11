@@ -7,11 +7,20 @@
   <link rel="stylesheet" type="text/css" href="../node_modules/vis/dist/vis.min.css">
   <script src="../node_modules/vis/dist/vis.min.js"></script>
   <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="https://rawgit.com/emn178/jquery-clickout/master/build/jquery.clickout.min.js"></script>
   <script src="../src/chain-network.js"></script>
   <script src="app.js"></script>
   <style type="text/css">
     #network {
       height: 600px;
+    }
+    #popup {
+      position: absolute;
+      background-color: rgba(0,0,0,0.8);
+      padding: 0 20px;
+      border-radius: 10px;
+      color: white;
+      display: none;
     }
   </style>
 </head>
@@ -29,5 +38,6 @@
     </svg> -->
 
 <div id="network"></div>
+<div id="popup"></div>
 </body>
 </html>
