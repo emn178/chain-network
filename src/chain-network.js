@@ -22,7 +22,7 @@
   function ChainNetwork(element, options) {
     var self = this;
     this.element = element;
-    this.pageSize = options.pageSize || 5;
+    this.pageSize = options.pageSize || 10;
     this.projectColor = options.projectColor || '#f0ad4e';
     this.projectTooltipTemplate = options.project.tooltipTemplate || 'Target: {target}<br/>Current: {incomingValue}({incomingPercentage}%)<br/>Used: {outgoingValue}({outgoingPercentage}%)';
     this.incomingEdgeColor = options.incomingEdgeColor || '#02c66c';
@@ -60,7 +60,9 @@
         var edge = $.extend({
           arrows: 'to',
           color: color,
-          dashes: dashes
+          dashes: dashes,
+          arrowStrikethrough: false,
+          smooth: dashes ? { type: 'continuous' } : false
         }, transcation);
         edge.id = edgeId;
         self.networkEdges.push(edge);
@@ -68,7 +70,7 @@
       }
       var aggEdge = self.aggEdgesMap[edgeId];
       aggEdge.transcations.push(transcation);
-      aggEdge.edge.label = aggEdge.edge.value = aggEdge.transcations.reduce(function (pre, current) {
+      aggEdge.edge.value = aggEdge.transcations.reduce(function (pre, current) {
         return pre + current.value;
       }, 0);
     });
@@ -87,9 +89,9 @@
     var outgoingPercentage = outgoingValue / incomingValue * 100;
     var showPercentage = Math.min(incomingPercentage, 100).toFixed(2);
 
-    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" >' +
+    var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" >' +
       '<foreignObject>' +
-        '<div xmlns="http://www.w3.org/1999/xhtml" style="width: 20px;height: 20px;background-color: #d0d0d0;position: relative;border-radius: 50%; overflow: hidden;">' +
+        '<div xmlns="http://www.w3.org/1999/xhtml" style="width: 50px;height: 50px;background-color: #d0d0d0;position: relative;border-radius: 50%; overflow: hidden;">' +
           '<div style="width: 100%;height: ' + showPercentage + '%;background-color: #02c66c;position: absolute;bottom: 0">' +
             '<div style="width: 100%;height: ' + outgoingPercentage.toFixed(2) + '%;background-color: #ff0000;position: absolute;bottom: 0">' +
             '</div>' +
@@ -114,6 +116,7 @@
       fixed: true,
       title: title
     });
+    this.rootNode.label = '';
 
     var data = {
       nodes: [],
@@ -123,7 +126,7 @@
     this.network = new vis.Network(element[0], data, $.extend({
       layout: {
         hierarchical: {
-          direction: 'LR'
+          direction: 'UD'
         }
       },
       edges: {
@@ -255,11 +258,13 @@
     }
 
     edges.push({ 
-      id: type + '_PAGE_EDGE_' + page,
+      id: type + '_PAGE_' + page,
       arrows: 'to',
       from: from,
       to: to,
-      color: color
+      color: color,
+      arrowStrikethrough: false,
+      smooth: false
     });
 
     return {

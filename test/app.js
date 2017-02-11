@@ -48,10 +48,10 @@
       },
       nodes: [
         { id: 'user_5', label: 'takasaky', group: 'user' },
-        { id: 'user_6', label: 'tester', group: 'user' },
         { id: 'user_4', label: 'will', group: 'user' },
         { id: 'user_7', label: 'user7', group: 'user' },
         { id: 'user_8', label: 'user8', group: 'user' },
+        { id: 'user_6', label: 'tester', group: 'user' },
         { id: 'user_9', label: 'user9', group: 'user' },
         { id: 'user_10', label: 'user10', group: 'user' },
         { id: 'user_11', label: 'user11', group: 'user' },
@@ -61,7 +61,11 @@
         { id: 'user_15', label: 'user15', group: 'user' },
         { id: 'user_16', label: 'user16', group: 'user' },
         { id: 'project_2', label: 'Project 2', group: 'project' },
-        { id: 'vendor_1', label: 'Vendor 1', group: 'vendor' }
+        { id: 'vendor_1', label: 'Vendor 1', group: 'vendor' },
+        { id: 'user_17', label: 'user17', group: 'user' },
+        { id: 'user_18', label: 'user18', group: 'user' },
+        { id: 'user_19', label: 'user19', group: 'user' },
+        { id: 'user_20', label: 'user20', group: 'user' }
       ],
       transcations: [
         { id: 'TID01', from: 'user_5', to: 'project_25', value: 3456 },
@@ -80,7 +84,11 @@
         { id: 'TID14', from: 'project_25', to: 'user_16', value: 1000 },
         { id: 'TID15', from: 'project_25', to: 'project_2', value: 100 },
         { id: 'TID16', from: 'project_25', to: 'vendor_1', value: 500 },
-        { id: 'TID17', from: 'user_7', to: 'project_25', value: 200 }
+        { id: 'TID17', from: 'user_7', to: 'project_25', value: 200 },
+        { id: 'TID18', from: 'user_17', to: 'project_25', value: 200 },
+        { id: 'TID19', from: 'user_18', to: 'project_25', value: 200 },
+        { id: 'TID20', from: 'user_19', to: 'project_25', value: 200 },
+        { id: 'TID21', from: 'user_20', to: 'project_25', value: 200 }
       ]
     }).on('chain:transcation', function (e, pointer, transcations) {
       var html = '';
