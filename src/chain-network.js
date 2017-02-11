@@ -138,12 +138,12 @@
         var node = self.nodesMap[obj.nodes[0]];
         if (node) {
           element.trigger('chain:node', [obj.pointer, node]);
-        } else {
+        } else if (obj.nodes[0].indexOf('_PAGE_') !== -1) {
           var parts = obj.nodes[0].split('_');
           if (parts[0] === 'incoming') {
             self.setIncomingPage(parseInt(parts[2]));
           } else {
-            self.setoutgoingPage(parseInt(parts[2]));
+            self.setOutgoingPage(parseInt(parts[2]));
           }
         }
       } else if (obj.edges.length) {
@@ -179,7 +179,7 @@
     this.render();
   };
 
-  ChainNetwork.prototype.setoutgoingPage = function (page) {
+  ChainNetwork.prototype.setOutgoingPage = function (page) {
     if (this.outgoingPage === page) {
       return;
     }
