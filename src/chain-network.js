@@ -1,7 +1,7 @@
 /**
  * [chain-network]{@link https://github.com/emn178/chain-network}
  *
- * @version 0.1.0
+ * @version 0.2.0
  * @author Chen, Yi-Cyuan [emn178@gmail.com]
  * @copyright Chen, Yi-Cyuan 2017
  */
@@ -25,7 +25,6 @@
     var self = this;
     this.element = element;
     this.pageSize = options.pageSize || 10;
-    this.projectColor = options.projectColor || '#f0ad4e';
     this.projectTooltipTemplate = options.project.tooltipTemplate || 'Target: {target}<br/>Current: {incomingValue}({incomingPercentage}%)<br/>Used: {outgoingValue}({outgoingPercentage}%)';
     this.incomingEdgeColor = options.incomingEdgeColor || '#02c66c';
     this.outgoingEdgeColor = options.outgoingEdgeColor || '#ff0000';
@@ -133,7 +132,6 @@
     this.rootNode = this.createNode(options.project, 1, {
       image: url,
       shape: 'image',
-      color: this.projectColor,
       fixed: true,
       title: title
     });
@@ -154,6 +152,10 @@
         smooth: {
           roundness: 0.5
         }
+      },
+      interaction: {
+        dragView: false,
+        zoomView: false
       }
     }, options.vis));
 
@@ -170,7 +172,11 @@
             self.setOutgoingPage(parseInt(parts[2]));
           }
         }
-      } else if (obj.edges.length) {
+        if (obj.nodes[0] === self.project.id) {
+          return;
+        }
+      }
+      if (obj.edges.length) {
         var aggEdge = self.aggEdgesMap[obj.edges[0]];
         if (aggEdge) {
           element.trigger('chain:transcation', [obj.pointer, aggEdge.transcations]);

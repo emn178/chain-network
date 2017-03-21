@@ -42,7 +42,6 @@
       },
       project: {
         id: 'project_25',
-        label: 'This Project',
         target: 50000,
         tooltipTemplate: 'Target: {target}<br/>Current: {incomingValue}({incomingPercentage}%)<br/>Used: {outgoingValue}({outgoingPercentage}%)'
       },

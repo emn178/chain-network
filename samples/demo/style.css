@@ -50,3 +50,13 @@ body, html, h1, h2 {
   color: white;
   display: none;
 }
+
+#network {
+  height: 600px;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#e6eef9+0,e6eef9+50,ffffe3+50,ffffe3+100 */
+  background: #e6eef9; /* Old browsers */
+  background: -moz-linear-gradient(top, #e6eef9 0%, #e6eef9 50%, #ffffe3 50%, #ffffe3 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #e6eef9 0%,#e6eef9 50%,#ffffe3 50%,#ffffe3 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #e6eef9 0%,#e6eef9 50%,#ffffe3 50%,#ffffe3 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6eef9', endColorstr='#ffffe3',GradientType=0 ); /* IE6-9 */
+}
